@@ -1,29 +1,41 @@
 package com.codestates.coffee;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/v1/members", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CoffeeController {
 
     @PostMapping
-    public String postCoffee(@RequestParam("engName") String engName, // 회원 정보를 등록해주는 핸들러 메서드
-                             @RequestParam("korname") String korName,
-                             @RequestParam("price") int price) {
-        System.out.println("# engName: " + engName);
-        System.out.println("# korName: " + korName);
-        System.out.println("# price: " + price);
+    public ResponseEntity postCoffee(@RequestParam("engName") String engName, // 회원 정보를 등록해주는 핸들러 메서드
+                                     @RequestParam("korName") String korName,
+                                     @RequestParam("price") int price) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("engName", engName);
+        map.put("korName", korName);
+        map.put("price", price);
 
-        String response =
-                "{\"" +
-                        "engName\":\"" + engName + "\"," +
-                        "\"korName\":\"" + korName + "\",\"" +
-                        "price\":\"" + price +
-                        "\"}"; //  JSON 형식에 맞추어 문자열을 작성
-        return response;
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{coffee-id}") // 클라이언트가 서버에 리소스를 조회할 때 사용하는 애너테이션
+    public  ResponseEntity getCoffee(@PathVariable("coffee-id")long coffeeId){ // 특정 회원의 정보를 클라이언트 쪽에 제공하는 핸들러 메서드
+        System.out.println("# coffeeId: " + coffeeId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getMembers() { // 회원 목록을 클라이언트에게 제공하는 핸들러 메서드
+        System.out.println("# get coffees");
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
