@@ -1,6 +1,6 @@
 package com.codestates.section3week1.coffee;
 
-import com.codestates.section3week1.member.NotSpace;
+import com.codestates.section3week1.validator.NotSpace;
 import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.Pattern;
 

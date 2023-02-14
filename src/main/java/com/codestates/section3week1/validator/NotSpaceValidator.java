@@ -1,4 +1,4 @@
-package com.codestates.section3week1.member;
+package com.codestates.section3week1.validator;
 
 import org.springframework.util.StringUtils;
 

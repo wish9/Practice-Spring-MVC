@@ -1,4 +1,6 @@
-package com.codestates.section3week1.member;
+package com.codestates.section3week1.validator;
+
+import com.codestates.section3week1.validator.NotSpaceValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
