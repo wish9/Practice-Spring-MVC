@@ -3,26 +3,31 @@ package com.codestates.section3week1.coffee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/coffees")
+@Validated
 public class CoffeeController {
 
     @PostMapping
-    public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto){
+    public ResponseEntity postCoffee(@Valid @RequestBody CoffeePostDto coffeePostDto){
 
         return new ResponseEntity<>(coffeePostDto, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{coffee-id}")
-    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
-                                      @RequestBody CoffeePatchDto coffeePatchDto){
+    public ResponseEntity patchCoffee(@PathVariable("coffee-id") @Positive long coffeeId,
+                                      @Valid @RequestBody CoffeePatchDto coffeePatchDto){
         coffeePatchDto.setCoffeeId(coffeeId);
+
         return new ResponseEntity(coffeePatchDto, HttpStatus.OK);
     }
 

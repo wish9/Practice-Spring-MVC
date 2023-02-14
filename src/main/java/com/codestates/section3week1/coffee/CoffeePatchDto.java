@@ -1,9 +1,17 @@
 package com.codestates.section3week1.coffee;
 
+import com.codestates.section3week1.member.NotSpace;
+import org.hibernate.validator.constraints.Range;
+import javax.validation.constraints.Pattern;
+
 public class CoffeePatchDto {
     private long coffeeId;
+    @NotSpace // null가능하게 해줘야 함
     private String korName;
-    private int price;
+    @Pattern(regexp = "^([a-zA-Z]+\\s?[a-zA-Z])*$")
+    private String engName;
+    @Range(min = 100, max= 50000)
+    private Integer price; // int로 하면 null이 안들어간다. 기본값인 0이 들어가기 때문에 range에 걸려서 선택적으로 사용 못함
 
     public long getCoffeeId() {
         return coffeeId;
@@ -21,11 +29,19 @@ public class CoffeePatchDto {
         this.korName = korName;
     }
 
-    public int getPrice() {
+    public String getEngName() {
+        return engName;
+    }
+
+    public void setEngName(String engName) {
+        this.engName = engName;
+    }
+
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }
