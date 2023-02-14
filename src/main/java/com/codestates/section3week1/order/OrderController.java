@@ -1,4 +1,4 @@
-package com.codestates.order;
+package com.codestates.section3week1.order;
 
 
 import org.springframework.http.HttpStatus;

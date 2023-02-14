@@ -1,4 +1,4 @@
-package com.codestates.coffee;
+package com.codestates.section3week1.coffee;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,19 +10,20 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(value = "/v1/members", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping("/v1/coffees")
 public class CoffeeController {
 
     @PostMapping
-    public ResponseEntity postCoffee(@RequestParam("engName") String engName, // 회원 정보를 등록해주는 핸들러 메서드
-                                     @RequestParam("korName") String korName,
-                                     @RequestParam("price") int price) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("engName", engName);
-        map.put("korName", korName);
-        map.put("price", price);
+    public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto){
 
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(coffeePostDto, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{coffee-id}")
+    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
+                                      @RequestBody CoffeePatchDto coffeePatchDto){
+        coffeePatchDto.setCoffeeId(coffeeId);
+        return new ResponseEntity(coffeePatchDto, HttpStatus.OK);
     }
 
     @GetMapping("/{coffee-id}") // 클라이언트가 서버에 리소스를 조회할 때 사용하는 애너테이션
