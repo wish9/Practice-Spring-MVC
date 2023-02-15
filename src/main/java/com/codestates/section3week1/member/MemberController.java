@@ -1,6 +1,7 @@
 package com.codestates.section3week1.member;
 
 import com.codestates.section3week1.member.mapstruct.mapper.MemberMapper;
+import com.codestates.section3week1.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -90,6 +91,13 @@ public class MemberController { // 회원 관리를 위한 클래스
         final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         // MethodArgumentNotValidException 객체(e)에서 getBindingResult().getFieldErrors()를 통해 발생한 에러 정보를 확인할 수 있다.
 
-        return new ResponseEntity(fieldErrors, HttpStatus.BAD_REQUEST);
+        List<ErrorResponse.FieldError> errors = fieldErrors.stream()
+                .map(error -> new ErrorResponse.FieldError(
+                        error.getField(),
+                        error.getRejectedValue(),
+                        error.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
     }
 }
