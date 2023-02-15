@@ -3,7 +3,9 @@ package com.codestates.section3week1.member;
 import com.codestates.section3week1.member.mapstruct.mapper.MemberMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -79,5 +81,15 @@ public class MemberController { // 회원 관리를 위한 클래스
         memberService.deleteMember(memberId);
         System.out.println("# delete member");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // 클라이언트에서 핸들러 메서드에 요청을 전송했을 때
+    // 각 메서드의 맞는 유효한 데이터가 아니면 유효성 검증에 실패하고, ``MethodArgumentNotValidException``이 발생
+    @ExceptionHandler // ``MethodArgumentNotValidException``이 발생하면 전달해주는 애너테이션
+    public ResponseEntity handleException(MethodArgumentNotValidException e) { // 예외처리 메서드
+        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        // MethodArgumentNotValidException 객체(e)에서 getBindingResult().getFieldErrors()를 통해 발생한 에러 정보를 확인할 수 있다.
+
+        return new ResponseEntity(fieldErrors, HttpStatus.BAD_REQUEST);
     }
 }

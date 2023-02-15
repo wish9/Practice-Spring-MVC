@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 
 public class MemberPostDto {
     @NotBlank
-    @Email
+    @Email(message = "올바른 Email양식을 입력하시오.")
     private String email;
     @NotBlank(message = "이름에는 공백이 포함되면 안됩니다.")
     private String name;
