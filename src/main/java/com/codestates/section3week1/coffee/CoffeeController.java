@@ -1,47 +1,79 @@
 package com.codestates.section3week1.coffee;
 
+import com.codestates.section3week1.coffee.entity.Coffee;
+import com.codestates.section3week1.coffee.mapstruct.mapper.CoffeeMapper;
+import com.codestates.section3week1.coffee.service.CoffeeService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/v1/coffees")
+@RequestMapping("/v5/coffees")
 @Validated
 public class CoffeeController {
 
-    @PostMapping
-    public ResponseEntity postCoffee(@Valid @RequestBody CoffeePostDto coffeePostDto){
+    private final CoffeeService coffeeService;
+    private final CoffeeMapper mapper;
 
-        return new ResponseEntity<>(coffeePostDto, HttpStatus.CREATED);
+    public CoffeeController(CoffeeService coffeeService, CoffeeMapper mapper) {
+        this.coffeeService = coffeeService;
+        this.mapper = mapper;
+    }
+
+
+    @PostMapping
+    public ResponseEntity postCoffee(@Valid @RequestBody CoffeePostDto coffeePostDto) {
+
+
+        Coffee coffee = mapper.coffeePostDtoToCoffee(coffeePostDto);
+
+        Coffee response = coffeeService.createCoffee(coffee);
+
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response),
+                HttpStatus.CREATED);
     }
 
     @PatchMapping("/{coffee-id}")
     public ResponseEntity patchCoffee(@PathVariable("coffee-id") @Positive long coffeeId,
-                                      @Valid @RequestBody CoffeePatchDto coffeePatchDto){
+                                      @Valid @RequestBody CoffeePatchDto coffeePatchDto) {
         coffeePatchDto.setCoffeeId(coffeeId);
 
-        return new ResponseEntity(coffeePatchDto, HttpStatus.OK);
+        Coffee coffee = mapper.coffeePatchDtoToCoffee(coffeePatchDto);
+        Coffee response = coffeeService.updateCoffee(coffee);
+
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response),
+                HttpStatus.OK);
     }
 
-    @GetMapping("/{coffee-id}") // 클라이언트가 서버에 리소스를 조회할 때 사용하는 애너테이션
-    public  ResponseEntity getCoffee(@PathVariable("coffee-id")long coffeeId){ // 특정 회원의 정보를 클라이언트 쪽에 제공하는 핸들러 메서드
-        System.out.println("# coffeeId: " + coffeeId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/{coffee-id}")
+    public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId) {
+        Coffee response = coffeeService.findCoffee(coffeeId);
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response),HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getMembers() { // 회원 목록을 클라이언트에게 제공하는 핸들러 메서드
-        System.out.println("# get coffees");
+    public ResponseEntity getCoffees() {
+        List<Coffee> coffees = coffeeService.findCoffees();
+        List<CoffeeResponseDto> response =
+                coffees.stream()
+                        .map(coffee -> mapper.coffeeToCoffeeResponseDto(coffee))
+                        .collect(Collectors.toList());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{coffee-id}")
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId) {
+        System.out.println("# delete coffee");
+        coffeeService.deleteCoffee(coffeeId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
