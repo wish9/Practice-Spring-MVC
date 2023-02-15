@@ -1,5 +1,6 @@
 package com.codestates.section3week1.member;
 
+import com.codestates.section3week1.member.mapstruct.mapper.MemberMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

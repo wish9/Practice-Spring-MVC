@@ -1,5 +1,9 @@
-package com.codestates.section3week1.member;
+package com.codestates.section3week1.member.mapper;
 
+import com.codestates.section3week1.member.Member;
+import com.codestates.section3week1.member.MemberPatchDto;
+import com.codestates.section3week1.member.MemberPostDto;
+import com.codestates.section3week1.member.MemberResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component // 빈 등록
