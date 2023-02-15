@@ -1,7 +1,10 @@
 package com.codestates.section3week1.member;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service // Spring Bean 등록
 public class MemberService {
     public Member createMember(Member member){ // 아직 DB연결 안했으니 대충 쓴거
         Member createMember = member;
