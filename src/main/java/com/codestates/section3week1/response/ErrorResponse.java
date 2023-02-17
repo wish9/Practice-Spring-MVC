@@ -12,42 +12,39 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponse { // 에러문 간략화해서 필요한 정보만 담는 용도의 클래스
+    private Integer status;
+    private String message;
     private List<FieldError> fieldErrors;
     private List<ConstraintViolationError> violationErrors;
-    private ServiceError serviceErrors;
-    private MethodNotAllowed methodErrors;
-    private ExceptionError exceptionError;
 
-    public ErrorResponse(List<FieldError> fieldErrors, List<ConstraintViolationError> violationErrors, ServiceError serviceErrors, MethodNotAllowed methodErrors, ExceptionError exceptionError) {
+    public ErrorResponse(Integer status, String message, List<FieldError> fieldErrors, List<ConstraintViolationError> violationErrors) {
+        this.status = status;
+        this.message = message;
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
-        this.serviceErrors = serviceErrors;
-        this.methodErrors = methodErrors;
-        this.exceptionError = exceptionError;
     }
 
     // BindingResult에 대한 ErrorResponse 객체 생성
     public static ErrorResponse of(BindingResult bindingResult){
-        return new ErrorResponse(FieldError.of1(bindingResult), null, null, null, null);
+        return new ErrorResponse(null, null, FieldError.of1(bindingResult), null);
     }
 
     // Set<ConstraintViolation<?>> 객체에 대한 ErrorResponse 객체 생성
     // 메서드 오버로딩
     public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
-        return new ErrorResponse(null, ConstraintViolationError.of2(violations), null, null, null);
+        return new ErrorResponse(null, null, null, ConstraintViolationError.of2(violations));
     }
 
     public static ErrorResponse of(ExceptionCode exceptionCode){
-        // return new ErrorResponse(null, null, new ArrayList<>((Collection) new ServiceError(exceptionCode.getStatus(), exceptionCode.getMessage())));
-        return new ErrorResponse(null, null, ServiceError.of3(exceptionCode), null, null);
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage(), null, null);
     }
 
     public static ErrorResponse of(HttpRequestMethodNotSupportedException e){
-        return new ErrorResponse(null, null, null, MethodNotAllowed.of4(e), null);
+        return new ErrorResponse(ExceptionCode.METHOD_NOT_ALLOWED.getStatus(), ExceptionCode.METHOD_NOT_ALLOWED.getMessage(), null, null);
     }
 
     public static ErrorResponse of(Exception e){
-        return new ErrorResponse(null, null, null, null, ExceptionError.of5(e));
+        return new ErrorResponse(ExceptionCode.INTERNAL_SERVER_ERROR.getStatus(), ExceptionCode.INTERNAL_SERVER_ERROR.getMessage(), null, null);
     }
 
 
@@ -96,56 +93,6 @@ public class ErrorResponse { // 에러문 간략화해서 필요한 정보만 �
                             constraintViolation.getInvalidValue().toString(),
                             constraintViolation.getMessage()))
                     .collect(Collectors.toList());
-        }
-    }
-
-    @Getter
-    private static class ServiceError{
-        private int status;
-        private String message;
-
-        public ServiceError(int status, String message) {
-            this.status = status;
-            this.message = message;
-
-        }
-
-
-        private static ServiceError of3(ExceptionCode exceptionCode){
-
-            return new ServiceError(exceptionCode.getStatus(), exceptionCode.getMessage());
-
-        }
-
-    }
-
-    @Getter
-    private static class MethodNotAllowed{
-        private int status;
-        private String message;
-
-        public MethodNotAllowed(int status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-
-        private static MethodNotAllowed of4(HttpRequestMethodNotSupportedException e){
-            return new MethodNotAllowed(ExceptionCode.METHOD_NOT_ALLOWED.getStatus(), ExceptionCode.METHOD_NOT_ALLOWED.getMessage());
-        }
-    }
-
-    @Getter
-    private static class ExceptionError{
-        private int status;
-        private String message;
-
-        public ExceptionError(int status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-
-        private static ExceptionError of5(Exception e){
-            return new ExceptionError(ExceptionCode.INTERNAL_SERVER_ERROR.getStatus(), ExceptionCode.INTERNAL_SERVER_ERROR.getMessage());
         }
     }
 }
