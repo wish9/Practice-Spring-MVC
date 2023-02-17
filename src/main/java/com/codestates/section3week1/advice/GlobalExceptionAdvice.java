@@ -1,8 +1,10 @@
 package com.codestates.section3week1.advice;
 
+import com.codestates.section3week1.exception.BusinessLogicException;
 import com.codestates.section3week1.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,5 +32,28 @@ public class GlobalExceptionAdvice { // 예외처리 클래스
         final ErrorResponse response = ErrorResponse.of(e.getConstraintViolations());
 
         return response;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
+        System.out.println(e.getExceptionCode().getStatus());
+        System.out.println(e.getMessage());
+
+        final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
+        return new ResponseEntity<>(response, HttpStatus.valueOf(e.getExceptionCode().getStatus()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+        final ErrorResponse response = ErrorResponse.of(e);
+
+        return new ResponseEntity(response, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleException(Exception e){
+        final ErrorResponse response = ErrorResponse.of(e);
+
+        return new ResponseEntity(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
