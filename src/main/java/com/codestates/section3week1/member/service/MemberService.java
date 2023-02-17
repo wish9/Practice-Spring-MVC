@@ -1,5 +1,6 @@
-package com.codestates.section3week1.member;
+package com.codestates.section3week1.member.service;
 
+import com.codestates.section3week1.member.entity.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

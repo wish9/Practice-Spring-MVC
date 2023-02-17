@@ -1,5 +1,8 @@
 package com.codestates.section3week1.coffee;
 
+import com.codestates.section3week1.coffee.dto.CoffeePatchDto;
+import com.codestates.section3week1.coffee.dto.CoffeePostDto;
+import com.codestates.section3week1.coffee.dto.CoffeeResponseDto;
 import com.codestates.section3week1.coffee.entity.Coffee;
 import com.codestates.section3week1.coffee.mapstruct.mapper.CoffeeMapper;
 import com.codestates.section3week1.coffee.service.CoffeeService;

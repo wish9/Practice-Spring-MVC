@@ -1,4 +1,4 @@
-package com.codestates.section3week1.member;
+package com.codestates.section3week1.member.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

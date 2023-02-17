@@ -1,12 +1,14 @@
 package com.codestates.section3week1.member;
 
+import com.codestates.section3week1.member.dto.MemberPatchDto;
+import com.codestates.section3week1.member.dto.MemberPostDto;
+import com.codestates.section3week1.member.dto.MemberResponseDto;
+import com.codestates.section3week1.member.entity.Member;
 import com.codestates.section3week1.member.mapstruct.mapper.MemberMapper;
-import com.codestates.section3week1.response.ErrorResponse;
+import com.codestates.section3week1.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

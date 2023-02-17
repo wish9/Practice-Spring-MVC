@@ -1,4 +1,4 @@
-package com.codestates.section3week1.coffee;
+package com.codestates.section3week1.coffee.dto;
 
 import com.codestates.section3week1.validator.NotSpace;
 import org.hibernate.validator.constraints.Range;

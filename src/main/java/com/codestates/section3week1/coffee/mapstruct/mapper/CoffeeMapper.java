@@ -1,8 +1,8 @@
 package com.codestates.section3week1.coffee.mapstruct.mapper;
 
-import com.codestates.section3week1.coffee.CoffeePatchDto;
-import com.codestates.section3week1.coffee.CoffeePostDto;
-import com.codestates.section3week1.coffee.CoffeeResponseDto;
+import com.codestates.section3week1.coffee.dto.CoffeePatchDto;
+import com.codestates.section3week1.coffee.dto.CoffeePostDto;
+import com.codestates.section3week1.coffee.dto.CoffeeResponseDto;
 import com.codestates.section3week1.coffee.entity.Coffee;
 import org.mapstruct.Mapper;
 
